@@ -1,23 +1,27 @@
 import Foundation
 import CoreLocation
 
-enum Strength: Equatable {
+enum MagnitudeClass: Equatable {
     case normal
     case strong
 }
 
-struct EarthQuakeItem {
+struct EarthquakeItem {
+    let identifier: String
     let location: CLLocationCoordinate2D
-    let radius: Double
-    let strength: Strength
+    let radiusInMeters: Double
+    let magnitude: String
+    let magnitudeClass: MagnitudeClass
 
     init(earthQuake: EarthQuake) {
+        self.identifier = earthQuake.eqid
         self.location = CLLocationCoordinate2D(
             latitude: earthQuake.lat,
             longitude: earthQuake.lng
         )
 
-        self.radius = earthQuake.depth
-        self.strength = earthQuake.magnitude >= 8 ? .strong : .normal
+        self.radiusInMeters = earthQuake.depth * 1000
+        self.magnitude = String(earthQuake.magnitude)
+        self.magnitudeClass = earthQuake.magnitude >= 8 ? .strong : .normal
     }
 }
