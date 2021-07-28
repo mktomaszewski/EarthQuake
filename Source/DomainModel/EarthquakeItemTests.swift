@@ -12,6 +12,7 @@ final class EarthquakeItemTests: XCTestCase {
         XCTAssertEqual(sut.magnitude,"8.5")
         XCTAssertEqual(sut.magnitudeClass, .strong)
         XCTAssertEqual(sut.radiusInMeters, 10300)
+        XCTAssertEqual(sut.dateString, "2020-08-11")
     }
 
     func testEarthquakeItemFromEarthquakeHasNormalMagnitudeClassForDataWithMagnitudeLessThan8() {

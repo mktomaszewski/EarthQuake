@@ -8,6 +8,7 @@ enum MagnitudeClass: Equatable {
 
 struct EarthquakeItem {
     let identifier: String
+    let dateString: String
     let location: CLLocationCoordinate2D
     let radiusInMeters: Double
     let magnitude: String
@@ -23,5 +24,6 @@ struct EarthquakeItem {
         self.radiusInMeters = earthQuake.depth * 1000
         self.magnitude = String(earthQuake.magnitude)
         self.magnitudeClass = earthQuake.magnitude >= 8 ? .strong : .normal
+        self.dateString = earthQuake.datetime
     }
 }
