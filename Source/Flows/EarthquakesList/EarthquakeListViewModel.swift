@@ -8,6 +8,7 @@ protocol EarthquakeViewModelProtocol {
     var items: [EarthquakeItem] { get }
     var itemsLoaded: (() -> Void)? { get set }
     var isLoading: ((Bool) -> Void)? { get set }
+    var alert: ((AlertViewModel) -> Void)? { get set }
     func selectItem(at index: Int)
     func loadItems()
 }
@@ -15,11 +16,12 @@ protocol EarthquakeViewModelProtocol {
 final class EarthquakeViewModel: EarthquakeViewModelProtocol {
     var itemsLoaded: (() -> Void)?
     var isLoading: ((Bool) -> Void)?
+    var alert: ((AlertViewModel) -> Void)?
     private(set) var items: [EarthquakeItem] = [] {
         didSet {
             itemsLoaded?()
         }
-    }
+    } 
 
     private let repository: EarthquakeRepositoryProtocol
     private weak var delegate: EarthquakeViewModelDelegate?
@@ -31,10 +33,13 @@ final class EarthquakeViewModel: EarthquakeViewModelProtocol {
     }
 
     func loadItems() {
-        repository.getEarthquakeItems { result in
+        isLoading?(true)
+        repository.getEarthquakeItems { [weak self] result in
+            guard let self = self else { return }
+            self.isLoading?(false)
             switch result {
             case .success(let items): self.items = items
-            case .failure(_): break
+            case .failure(let error): self.alert?(AlertViewModelFactory.create(error: error))
             }
         }
     }

@@ -33,22 +33,43 @@ final class EarthquakeListViewController: UIViewController {
         return tableView
     }()
 
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+
 }
 
 private extension EarthquakeListViewController {
     func setupViews() {
+        // TODO: Localize
+        title = "Earthquakes"
         view.addSubview(tableView)
+        view.addSubview(loadingIndicator)
     }
 
     func layoutViews() {
         tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+
+        loadingIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
     }
 
     func bindOutputs() {
         viewModel.itemsLoaded = { [weak tableView] in
             tableView?.reloadData()
+        }
+
+        viewModel.isLoading = { [weak loadingIndicator] isLoading in
+            isLoading ? loadingIndicator?.startAnimating() : loadingIndicator?.stopAnimating()
+        }
+
+        viewModel.alert = { [weak self] alert in
+            self?.present(UIAlertController.create(from: alert), animated: true, completion: nil)
         }
     }
 }
