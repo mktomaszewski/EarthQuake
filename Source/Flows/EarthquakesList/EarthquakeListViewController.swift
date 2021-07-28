@@ -19,17 +19,17 @@ final class EarthquakeListViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         layoutViews()
+        configureViews()
         bindOutputs()
         viewModel.loadItems()
     }
 
     // MARK: Views
-
+    private let refreshControl = UIRefreshControl()
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.dataSource = self
-        tableView.delegate = self
         tableView.register(EarthquakeTableViewCell.self, forCellReuseIdentifier: EarthquakeTableViewCell.reuseIdentifier)
+        tableView.refreshControl = refreshControl
         return tableView
     }()
 
@@ -59,9 +59,20 @@ private extension EarthquakeListViewController {
         }
     }
 
+    func configureViews() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+
+    @objc func refresh() {
+        viewModel.loadItems()
+    }
+
     func bindOutputs() {
-        viewModel.itemsLoaded = { [weak tableView] in
-            tableView?.reloadData()
+        viewModel.itemsLoaded = { [weak self] in
+            self?.refreshControl.endRefreshing()
+            self?.tableView.reloadData()
         }
 
         viewModel.isLoading = { [weak loadingIndicator] isLoading in
