@@ -1,7 +1,7 @@
 import Foundation
 
 protocol EarthquakeApiClientProtocol: AnyObject {
-    func getEarthquakes(north: Double, south: Double, east: Double, west: Double, completion: @escaping (Result<EarthQuakeResponse, NetworkError>) -> Void)
+    func getEarthquakes(north: Double, south: Double, east: Double, west: Double, completion: @escaping (Result<EarthquakeResponse, NetworkError>) -> Void)
 }
 
 final class EarthquakeApiClient: EarthquakeApiClientProtocol {
@@ -11,7 +11,7 @@ final class EarthquakeApiClient: EarthquakeApiClientProtocol {
         self.networkClient = networkClient
     }
 
-    func getEarthquakes(north: Double, south: Double, east: Double, west: Double, completion: @escaping (Result<EarthQuakeResponse, NetworkError>) -> Void) {
+    func getEarthquakes(north: Double, south: Double, east: Double, west: Double, completion: @escaping (Result<EarthquakeResponse, NetworkError>) -> Void) {
 
         let request: URLRequest
         do {
@@ -35,7 +35,7 @@ final class EarthquakeApiClient: EarthquakeApiClientProtocol {
             switch result {
             case .success(let data):
                 do {
-                    let response = try JSONDecoder().decode(EarthQuakeResponse.self, from: data)
+                    let response = try JSONDecoder().decode(EarthquakeResponse.self, from: data)
                     completion(.success(response))
                 } catch {
                     print(error)

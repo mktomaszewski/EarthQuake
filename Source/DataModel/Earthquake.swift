@@ -1,6 +1,6 @@
 import Foundation
 
-struct EarthQuake: Decodable {
+struct Earthquake: Decodable {
     let eqid: String
     let datetime: String
     let depth: Double
@@ -9,6 +9,6 @@ struct EarthQuake: Decodable {
     let magnitude: Double
 }
 
-struct EarthQuakeResponse: Decodable {
-    let earthquakes: [EarthQuake]
+struct EarthquakeResponse: Decodable {
+    let earthquakes: [Earthquake]
 }

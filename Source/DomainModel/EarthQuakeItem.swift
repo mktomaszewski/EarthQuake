@@ -13,7 +13,7 @@ struct EarthquakeItem {
     let magnitude: String
     let magnitudeClass: MagnitudeClass
 
-    init(earthQuake: EarthQuake) {
+    init(earthQuake: Earthquake) {
         self.identifier = earthQuake.eqid
         self.location = CLLocationCoordinate2D(
             latitude: earthQuake.lat,
